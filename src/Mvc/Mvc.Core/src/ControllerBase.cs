@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
+using System.Net;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -220,6 +221,15 @@ public abstract class ControllerBase
         => new StatusCodeResult(statusCode);
 
     /// <summary>
+    /// Creates a <see cref="StatusCodeResult"/> object by specifying a <paramref name="statusCode"/>.
+    /// </summary>
+    /// <param name="statusCode">The status code to set on the response.</param>
+    /// <returns>The created <see cref="StatusCodeResult"/> object for the response.</returns>
+    [NonAction]
+    public virtual StatusCodeResult StatusCode(System.Net.HttpStatusCode statusCode)
+        => new StatusCodeResult((int) statusCode);
+
+    /// <summary>
     /// Creates an <see cref="ObjectResult"/> object by specifying a <paramref name="statusCode"/> and <paramref name="value"/>
     /// </summary>
     /// <param name="statusCode">The status code to set on the response.</param>
@@ -233,6 +243,16 @@ public abstract class ControllerBase
             StatusCode = statusCode
         };
     }
+
+    /// <summary>
+    /// Creates an <see cref="ObjectResult"/> object by specifying a <paramref name="statusCode"/> and <paramref name="value"/>
+    /// </summary>
+    /// <param name="statusCode">The status code to set on the response.</param>
+    /// <param name="value">The value to set on the <see cref="ObjectResult"/>.</param>
+    /// <returns>The created <see cref="ObjectResult"/> object for the response.</returns>
+    [NonAction]
+    public virtual ObjectResult StatusCode(System.Net.HttpStatusCode statusCode, [ActionResultObjectValue] object? value)
+        => StatusCode((int) statusCode, value)
 
     /// <summary>
     /// Creates a <see cref="ContentResult"/> object by specifying a <paramref name="content"/> string.
